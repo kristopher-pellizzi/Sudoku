@@ -48,5 +48,17 @@ solver:
 $(OBJ_DIR)CliGame.o: $(SRC_DIR)CliGame.cpp $(ROOT_DIR)/SudokuSolver/solver $(ROOT_DIR)/SudokuSolver/CppArgumentParser/lib/libArgumentParser.so | $(OBJ_DIR)
 	$(CXX) $(COMP_FLAGS) -I$(ROOT_DIR)/SudokuSolver/CppArgumentParser/include $< -o $@
 
-$(BIN_DIR)game: $(OBJ_DIR)CliGame.o $(SOLVER_OBJ_DIR)Checkpoint.o $(SOLVER_OBJ_DIR)LockedCandidateIndex.o $(SOLVER_OBJ_DIR)Solver.o $(SOLVER_OBJ_DIR)Grid.o $(SOLVER_OBJ_DIR)PathGridInitializer.o $(SOLVER_OBJ_DIR)RandomGridInitializer.o $(SOLVER_OBJ_DIR)RandomNumberGenerator.o $(SOLVER_OBJ_DIR)View.o $(SOLVER_OBJ_DIR)CliView.o $(SOLVER_OBJ_DIR)Cell.o $(SOLVER_OBJ_DIR)Coordinates.o | $(BIN_DIR)
+$(OBJ_DIR)MainMenuState.o: $(SRC_DIR)MainMenuState.cpp | $(OBJ_DIR)
+	$(CXX) $(COMP_FLAGS) $< -o $@
+
+$(OBJ_DIR)RowSelectionState.o: $(SRC_DIR)RowSelectionState.cpp | $(OBJ_DIR)
+	$(CXX) $(COMP_FLAGS) $< -o $@
+
+$(OBJ_DIR)ColSelectionState.o: $(SRC_DIR)ColSelectionState.cpp | $(OBJ_DIR)
+	$(CXX) $(COMP_FLAGS) $< -o $@
+
+$(OBJ_DIR)ValSelectionState.o: $(SRC_DIR)ValSelectionState.cpp | $(OBJ_DIR)
+	$(CXX) $(COMP_FLAGS) $< -o $@
+
+$(BIN_DIR)game: $(OBJ_DIR)CliGame.o $(OBJ_DIR)MainMenuState.o $(OBJ_DIR)RowSelectionState.o $(OBJ_DIR)ColSelectionState.o $(OBJ_DIR)ValSelectionState.o $(SOLVER_OBJ_DIR)Checkpoint.o $(SOLVER_OBJ_DIR)LockedCandidateIndex.o $(SOLVER_OBJ_DIR)Solver.o $(SOLVER_OBJ_DIR)Grid.o $(SOLVER_OBJ_DIR)PathGridInitializer.o $(SOLVER_OBJ_DIR)RandomGridInitializer.o $(SOLVER_OBJ_DIR)RandomNumberGenerator.o $(SOLVER_OBJ_DIR)View.o $(SOLVER_OBJ_DIR)CliView.o $(SOLVER_OBJ_DIR)Cell.o $(SOLVER_OBJ_DIR)Coordinates.o | $(BIN_DIR)
 	$(CXX) -L$(ROOT_DIR)/SudokuSolver/CppArgumentParser/lib -lArgumentParser $^ -o $@
