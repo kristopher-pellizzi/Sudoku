@@ -1,9 +1,9 @@
 #include <vector>
-#include "ColSelectionState.h"
-#include "RowSelectionState.h"
-#include "ValSelectionState.h"
+#include "EraseColSelectionState.h"
+#include "EraseRowSelectionState.h"
+#include "MainMenuState.h"
 
-ColSelectionState::ColSelectionState(View* v, unsigned row_idx){
+EraseColSelectionState::EraseColSelectionState(View* v, GameGrid& grid, unsigned row_idx) : GameState(grid){
     this->v = v;
     this->current_menu = MenuType::COLSELECTION;
     this->row_idx = row_idx;
@@ -11,21 +11,21 @@ ColSelectionState::ColSelectionState(View* v, unsigned row_idx){
     this->val = 0;
 }
 
-void ColSelectionState::print_menu() const{
+void EraseColSelectionState::print_menu() const{
     std::stringstream sstream;
 
     sstream << "Row idx: " << row_idx << std::endl;
     sstream << "Insert a col index or 'q' to go back to row index selection:" << std::endl;
 
-    v->draw();
+    v->draw(&grid);
     v->print(sstream.str());
 }
 
-GameState* ColSelectionState::go_back() const{
-    return new RowSelectionState(v);
+GameState* EraseColSelectionState::go_back() const{
+    return new EraseRowSelectionState(v, grid);
 }
 
-GameState* ColSelectionState::manage_user_input(){
+GameState* EraseColSelectionState::manage_user_input(){
     auto max_size = std::numeric_limits<std::streamsize>::max();
     unsigned n = 0;
 
@@ -60,7 +60,21 @@ GameState* ColSelectionState::manage_user_input(){
         if (n < grid_width){
             input_ok = true;
             col_idx = n;
-            return new ValSelectionState(v, row_idx, col_idx);
+            std::stringstream sstream;
+            if (grid.erase(row_idx, col_idx)){
+                sstream << "Cannot erase fixed cell (" << row_idx << ", " << col_idx << ")";
+            }
+            else{
+                sstream << "Erased cell (" << row_idx << ", " << col_idx << ")";
+            }
+            v->print(sstream.str());
+
+            return new MainMenuState(v, grid);
+        }
+        else{
+            std::stringstream sstream;
+            sstream << "Please insert an index between 0 and " << grid_width - 1;
+            v->print(sstream.str());
         }
     }
 

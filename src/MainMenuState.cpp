@@ -1,8 +1,9 @@
 #include <vector>
 #include "MainMenuState.h"
-#include "RowSelectionState.h"
+#include "FillRowSelectionState.h"
+#include "EraseRowSelectionState.h"
 
-MainMenuState::MainMenuState(View* v){
+MainMenuState::MainMenuState(View* v, GameGrid& grid) : GameState(grid){
     this->v = v;
     this->current_menu = MenuType::MAINMENU;
     this->row_idx = 0;
@@ -13,6 +14,7 @@ MainMenuState::MainMenuState(View* v){
 void MainMenuState::print_menu() const{
     std::vector<string> choices {
         "Fill Cell",
+        "Erase Cell",
         "Submit Grid",
         "Exit"
     };
@@ -24,7 +26,7 @@ void MainMenuState::print_menu() const{
         sstream << i + 1 << ") " << choices[i] << std::endl;
     }
 
-    v->draw();
+    v->draw(&grid);
     v->print(sstream.str());
 }
 
@@ -62,11 +64,13 @@ GameState* MainMenuState::manage_user_input(){
         
         switch (n){
             case 1:
-                return new RowSelectionState(v);
+                return new FillRowSelectionState(v, grid);
             case 2:
+                return new EraseRowSelectionState(v, grid);
+            case 3:
                 v->print("Submission not yet implemented\n");
                 break;
-            case 3:
+            case 4:
                 return go_back();
                 break;
             default:

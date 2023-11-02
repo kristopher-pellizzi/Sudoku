@@ -10,7 +10,7 @@ class MainMenuState : public GameState{
         GameState* go_back() const;
 
     public:
-        MainMenuState(View* v);
+        MainMenuState(View* v, GameGrid& grid);
 
         GameState* manage_user_input();
 };

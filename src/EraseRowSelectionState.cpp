@@ -1,9 +1,9 @@
 #include <vector>
-#include "RowSelectionState.h"
-#include "ColSelectionState.h"
+#include "EraseRowSelectionState.h"
+#include "EraseColSelectionState.h"
 #include "MainMenuState.h"
 
-RowSelectionState::RowSelectionState(View* v){
+EraseRowSelectionState::EraseRowSelectionState(View* v, GameGrid& grid) : GameState(grid){
     this->v = v;
     this->current_menu = MenuType::ROWSELECTION;
     this->row_idx = 0;
@@ -11,20 +11,20 @@ RowSelectionState::RowSelectionState(View* v){
     this->val = 0;
 }
 
-void RowSelectionState::print_menu() const{
+void EraseRowSelectionState::print_menu() const{
     std::stringstream sstream;
 
     sstream << "Insert a row index or 'q' to go back to main menu:" << std::endl;
 
-    v->draw();
+    v->draw(&grid);
     v->print(sstream.str());
 }
 
-GameState* RowSelectionState::go_back() const{
-    return new MainMenuState(v);
+GameState* EraseRowSelectionState::go_back() const{
+    return new MainMenuState(v, grid);
 }
 
-GameState* RowSelectionState::manage_user_input(){
+GameState* EraseRowSelectionState::manage_user_input(){
     auto max_size = std::numeric_limits<std::streamsize>::max();
     unsigned n = 0;
 
@@ -61,7 +61,12 @@ GameState* RowSelectionState::manage_user_input(){
         if (n < grid_width){
             input_ok = true;
             row_idx = n;
-            return new ColSelectionState(v, row_idx);
+            return new EraseColSelectionState(v, grid, row_idx);
+        }
+        else{
+            std::stringstream sstream;
+            sstream << "Please insert an index between 0 and " << grid_width;
+            v->print(sstream.str());
         }
     }
 

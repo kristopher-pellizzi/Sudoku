@@ -4,10 +4,12 @@
 #include <sstream>
 #include "MenuType.h"
 #include "View.h"
+#include "GameGrid.h"
 
 class GameState{
     protected:
         View* v;
+        GameGrid& grid;
         unsigned grid_width;
         MenuType current_menu;
         unsigned row_idx;
@@ -19,6 +21,8 @@ class GameState{
         virtual GameState* go_back() const = 0;
 
     public:
+        GameState(GameGrid& grid);
+
         virtual GameState* manage_user_input() = 0;
 };
 

@@ -1,32 +1,31 @@
 #include <vector>
-#include "ValSelectionState.h"
 #include "FillColSelectionState.h"
-#include "MainMenuState.h"
+#include "FillRowSelectionState.h"
+#include "ValSelectionState.h"
 
-ValSelectionState::ValSelectionState(View* v, GameGrid& grid, unsigned row_idx, unsigned col_idx) : GameState(grid){
+FillColSelectionState::FillColSelectionState(View* v, GameGrid& grid, unsigned row_idx) : GameState(grid){
     this->v = v;
-    this->current_menu = MenuType::VALSELECTION;
+    this->current_menu = MenuType::COLSELECTION;
     this->row_idx = row_idx;
-    this->col_idx = col_idx;
+    this->col_idx = 0;
     this->val = 0;
 }
 
-void ValSelectionState::print_menu() const{
+void FillColSelectionState::print_menu() const{
     std::stringstream sstream;
 
     sstream << "Row idx: " << row_idx << std::endl;
-    sstream << "Col idx: " << col_idx << std::endl;
-    sstream << "Insert a value for the cell or 'q' to go back to column index selection:" << std::endl;
+    sstream << "Insert a col index or 'q' to go back to row index selection:" << std::endl;
 
     v->draw(&grid);
     v->print(sstream.str());
 }
 
-GameState* ValSelectionState::go_back() const{
-    return new FillColSelectionState(v, grid, row_idx);
+GameState* FillColSelectionState::go_back() const{
+    return new FillRowSelectionState(v, grid);
 }
 
-GameState* ValSelectionState::manage_user_input(){
+GameState* FillColSelectionState::manage_user_input(){
     auto max_size = std::numeric_limits<std::streamsize>::max();
     unsigned n = 0;
 
@@ -58,24 +57,14 @@ GameState* ValSelectionState::manage_user_input(){
 
         istream.ignore(max_size, '\n');
 
-        if (n > 0 && n <= grid_width){
+        if (n < grid_width){
             input_ok = true;
-            val = n;
-            std::stringstream sstream;
-            if (grid.set(row_idx, col_idx, val)){
-                sstream << "Cannot set value for fixed cell (" << row_idx << ", " << col_idx << ")";
-            }
-            else{
-                sstream << "Inserted value " << val << " into cell (" << row_idx << ", " << col_idx << ")";
-            }
-            v->print(sstream.str());
-            
-
-            return new MainMenuState(v, grid);
+            col_idx = n;
+            return new ValSelectionState(v, grid, row_idx, col_idx);
         }
         else{
             std::stringstream sstream;
-            sstream << "Please insert a value between 1 and " << grid_width;
+            sstream << "Please insert an index between 0 and " << grid_width - 1;
             v->print(sstream.str());
         }
     }

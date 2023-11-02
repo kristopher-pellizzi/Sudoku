@@ -4,12 +4,13 @@
 #include "PathGridInitializer.h"
 #include "RandomGridInitializer.h"
 #include "MainMenuState.h"
-#include "RowSelectionState.h"
-#include "ColSelectionState.h"
+#include "FillRowSelectionState.h"
+#include "FillColSelectionState.h"
 #include "ValSelectionState.h"
+#include "GameGrid.h"
 
-int play(View* v){
-    GameState* state = new MainMenuState(v);
+int play(View* v, GameGrid& grid){
+    GameState* state = new MainMenuState(v, grid);
 
     while (true){
         state = state->manage_user_input();
@@ -24,7 +25,7 @@ int main(int argc, char* argv[]){
     grid.set_view(v);
     IGridInitializer* initializer = new RandomGridInitializer(&v);
     initializer->init(grid);
-    v.draw();
+    GameGrid game_grid(grid);
 
-    return play(&v);
+    return play(&v, game_grid);
 }
