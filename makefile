@@ -8,7 +8,7 @@ CXX := g++
 COMP_FLAGS := -std=c++17 -Wall -Werror -Iinclude -ISudokuSolver/include -c $(ADD_COMP_FLAGS)
 
 .PHONY: all
-all: $(BIN_DIR)game
+all: $(BIN_DIR)sudoku
 
 .PHONY: clean
 clean:
@@ -72,5 +72,5 @@ $(OBJ_DIR)ValSelectionState.o: $(SRC_DIR)ValSelectionState.cpp | $(OBJ_DIR)
 $(OBJ_DIR)GameGrid.o: $(SRC_DIR)GameGrid.cpp | $(OBJ_DIR)
 	$(CXX) $(COMP_FLAGS) $< -o $@
 
-$(BIN_DIR)game: $(OBJ_DIR)CliGame.o $(OBJ_DIR)GameGrid.o $(OBJ_DIR)GameState.o $(OBJ_DIR)MainMenuState.o $(OBJ_DIR)FillRowSelectionState.o $(OBJ_DIR)EraseRowSelectionState.o $(OBJ_DIR)FillColSelectionState.o $(OBJ_DIR)EraseColSelectionState.o $(OBJ_DIR)ValSelectionState.o $(SOLVER_OBJ_DIR)Checkpoint.o $(SOLVER_OBJ_DIR)LockedCandidateIndex.o $(SOLVER_OBJ_DIR)Solver.o $(SOLVER_OBJ_DIR)Grid.o $(SOLVER_OBJ_DIR)PathGridInitializer.o $(SOLVER_OBJ_DIR)RandomGridInitializer.o $(SOLVER_OBJ_DIR)RandomNumberGenerator.o $(SOLVER_OBJ_DIR)View.o $(SOLVER_OBJ_DIR)CliView.o $(SOLVER_OBJ_DIR)Cell.o $(SOLVER_OBJ_DIR)Coordinates.o | $(BIN_DIR)
+$(BIN_DIR)sudoku: $(OBJ_DIR)CliGame.o $(OBJ_DIR)GameGrid.o $(OBJ_DIR)GameState.o $(OBJ_DIR)MainMenuState.o $(OBJ_DIR)FillRowSelectionState.o $(OBJ_DIR)EraseRowSelectionState.o $(OBJ_DIR)FillColSelectionState.o $(OBJ_DIR)EraseColSelectionState.o $(OBJ_DIR)ValSelectionState.o $(SOLVER_OBJ_DIR)Checkpoint.o $(SOLVER_OBJ_DIR)LockedCandidateIndex.o $(SOLVER_OBJ_DIR)Solver.o $(SOLVER_OBJ_DIR)Grid.o $(SOLVER_OBJ_DIR)PathGridInitializer.o $(SOLVER_OBJ_DIR)RandomGridInitializer.o $(SOLVER_OBJ_DIR)RandomNumberGenerator.o $(SOLVER_OBJ_DIR)View.o $(SOLVER_OBJ_DIR)CliView.o $(SOLVER_OBJ_DIR)Cell.o $(SOLVER_OBJ_DIR)Coordinates.o | $(BIN_DIR)
 	$(CXX) -L$(ROOT_DIR)/SudokuSolver/CppArgumentParser/lib -lArgumentParser $^ -o $@
