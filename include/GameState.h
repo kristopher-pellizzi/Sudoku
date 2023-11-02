@@ -9,9 +9,9 @@
 class GameState{
     protected:
         View* v;
+        Grid& solution;
         GameGrid& grid;
         unsigned grid_width;
-        MenuType current_menu;
         unsigned row_idx;
         unsigned col_idx;
         unsigned val;
@@ -21,7 +21,7 @@ class GameState{
         virtual GameState* go_back() const = 0;
 
     public:
-        GameState(GameGrid& grid);
+        GameState(Grid& solution, GameGrid& grid);
 
         virtual GameState* manage_user_input() = 0;
 };

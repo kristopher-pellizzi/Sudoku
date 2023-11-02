@@ -3,9 +3,8 @@
 #include "FillRowSelectionState.h"
 #include "EraseRowSelectionState.h"
 
-MainMenuState::MainMenuState(View* v, GameGrid& grid) : GameState(grid){
+MainMenuState::MainMenuState(View* v, Grid& solution, GameGrid& grid) : GameState(solution, grid){
     this->v = v;
-    this->current_menu = MenuType::MAINMENU;
     this->row_idx = 0;
     this->col_idx = 0;
     this->val = 0;
@@ -32,6 +31,27 @@ void MainMenuState::print_menu() const{
 
 GameState* MainMenuState::go_back() const{
     v->print("Goodbye\n");
+    exit(0);
+}
+
+void MainMenuState::submit() const{
+    for (unsigned i = 0; i < grid_width; ++i){
+        for (unsigned j = 0; j < grid_width; ++j){
+            if (grid.get(i, j) == 0){
+                v->print("Grid is not completely filled yet. You can't submit an incomplete grid.");
+                return;
+            }
+
+            if(grid.get(i, j) != solution.get(i, j)){
+                v->print("Something's wrong. Check your grid and try again");
+                return;
+            }
+
+        }
+    }
+
+    v->print("You successfully completed the Sudoku grid!");
+    v->print("Congratulations!!!");
     exit(0);
 }
 
@@ -64,11 +84,11 @@ GameState* MainMenuState::manage_user_input(){
         
         switch (n){
             case 1:
-                return new FillRowSelectionState(v, grid);
+                return new FillRowSelectionState(v, solution, grid);
             case 2:
-                return new EraseRowSelectionState(v, grid);
+                return new EraseRowSelectionState(v, solution, grid);
             case 3:
-                v->print("Submission not yet implemented\n");
+                submit();
                 break;
             case 4:
                 return go_back();

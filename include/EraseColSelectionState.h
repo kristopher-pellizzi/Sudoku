@@ -10,7 +10,7 @@ class EraseColSelectionState : public GameState{
         GameState* go_back() const;
 
     public:
-        EraseColSelectionState(View* v, GameGrid& grid, unsigned row_idx);
+        EraseColSelectionState(View* v, Grid& solution, GameGrid& grid, unsigned row_idx);
 
         GameState* manage_user_input();
 };

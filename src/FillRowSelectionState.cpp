@@ -3,9 +3,8 @@
 #include "FillColSelectionState.h"
 #include "MainMenuState.h"
 
-FillRowSelectionState::FillRowSelectionState(View* v, GameGrid& grid) : GameState(grid){
+FillRowSelectionState::FillRowSelectionState(View* v, Grid& solution, GameGrid& grid) : GameState(solution, grid){
     this->v = v;
-    this->current_menu = MenuType::ROWSELECTION;
     this->row_idx = 0;
     this->col_idx = 0;
     this->val = 0;
@@ -21,7 +20,7 @@ void FillRowSelectionState::print_menu() const{
 }
 
 GameState* FillRowSelectionState::go_back() const{
-    return new MainMenuState(v, grid);
+    return new MainMenuState(v, solution, grid);
 }
 
 GameState* FillRowSelectionState::manage_user_input(){
@@ -61,7 +60,7 @@ GameState* FillRowSelectionState::manage_user_input(){
         if (n < grid_width){
             input_ok = true;
             row_idx = n;
-            return new FillColSelectionState(v, grid, row_idx);
+            return new FillColSelectionState(v, solution, grid, row_idx);
         }
         else{
             std::stringstream sstream;

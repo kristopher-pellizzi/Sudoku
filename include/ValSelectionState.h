@@ -11,7 +11,7 @@ class ValSelectionState : public GameState{
         GameState* go_back() const;
 
     public:
-        ValSelectionState(View* v, GameGrid& grid, unsigned row_idx, unsigned col_idx);
+        ValSelectionState(View* v, Grid& solution, GameGrid& grid, unsigned row_idx, unsigned col_idx);
 
         GameState* manage_user_input();
 };

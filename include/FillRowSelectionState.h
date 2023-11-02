@@ -10,7 +10,7 @@ class FillRowSelectionState : public GameState{
         GameState* go_back() const;
 
     public:
-        FillRowSelectionState(View* v, GameGrid& grid);
+        FillRowSelectionState(View* v, Grid& solution, GameGrid& grid);
 
         GameState* manage_user_input();
 };

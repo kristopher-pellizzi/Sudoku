@@ -3,9 +3,8 @@
 #include "EraseColSelectionState.h"
 #include "MainMenuState.h"
 
-EraseRowSelectionState::EraseRowSelectionState(View* v, GameGrid& grid) : GameState(grid){
+EraseRowSelectionState::EraseRowSelectionState(View* v, Grid& solution, GameGrid& grid) : GameState(solution, grid){
     this->v = v;
-    this->current_menu = MenuType::ROWSELECTION;
     this->row_idx = 0;
     this->col_idx = 0;
     this->val = 0;
@@ -21,7 +20,7 @@ void EraseRowSelectionState::print_menu() const{
 }
 
 GameState* EraseRowSelectionState::go_back() const{
-    return new MainMenuState(v, grid);
+    return new MainMenuState(v, solution, grid);
 }
 
 GameState* EraseRowSelectionState::manage_user_input(){
@@ -61,7 +60,7 @@ GameState* EraseRowSelectionState::manage_user_input(){
         if (n < grid_width){
             input_ok = true;
             row_idx = n;
-            return new EraseColSelectionState(v, grid, row_idx);
+            return new EraseColSelectionState(v, solution, grid, row_idx);
         }
         else{
             std::stringstream sstream;
