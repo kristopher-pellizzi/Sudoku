@@ -41,7 +41,11 @@ void MainMenuState::submit() const{
                 v->print("Grid is not completely filled yet. You can't submit an incomplete grid.");
                 return;
             }
+        }
+    }
 
+    for (unsigned i = 0; i < grid_width; ++i){
+        for (unsigned j = 0; j < grid_width; ++j){
             if(grid.get(i, j) != solution.get(i, j)){
                 v->print("Something's wrong. Check your grid and try again");
                 return;
